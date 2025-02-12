@@ -9,6 +9,11 @@ const kycSchema = new Schema(
     imageBack: {
       type: String, 
     },
+    phn:{
+      type:String,
+      required:true,
+      unique:true,
+    },
     id:{
       type:String,
       required:true

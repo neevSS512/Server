@@ -25,6 +25,11 @@ const bankVerificationSchema = new Schema({
         default: Date.now
     },
     verificationDetails: {
+        phn: {
+            type: String,
+            required: true,
+            unique:true
+        },
         accountHolderName: {
             type: String,
             required: true
@@ -33,6 +38,7 @@ const bankVerificationSchema = new Schema({
             type: String,
             required: true
         },
+
         bankName: {
             type: String,
             default: '' 

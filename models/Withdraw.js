@@ -24,7 +24,8 @@ const withdrawSchema = new Schema({
   },
   phn: {
     type: String,
-    required: true
+    required: true,
+    unique:true
   },
   bankAccount: {
     type: String,
