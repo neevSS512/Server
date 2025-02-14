@@ -11,7 +11,20 @@ const withdrawRoutes=require("./routes/withdraw.js")
 const kycRoutes=require("./routes/kyc.js")
 const bankRoutes=require("./routes/bankdata.js")
 const gameuserRoutes=require("./routes/gameuser.js")
-const playingctgRoutes=require("./routes/playingCTG.js")
+const playctgRoutes = require("./routes/pctg.js");
+const playpoolctgRoutes = require("./routes/poolctg.js");
+const dealctgRoutes = require("./routes/dealctg.js");
+const ludoctgRoutes = require("./routes/ludoplayctg"); 
+const snakectgRoutes = require("./routes/snakeplayctg"); 
+const ludopublicRoutes = require("./routes/ludopublic.js"); 
+const ludocounterRoutes = require("./routes/ludocounter.js"); 
+const snakecounterRoutes = require("./routes/snakecounter.js"); 
+const ludoscoreRoutes = require("./routes/ludoscore.js"); 
+const snakescoreRoutes = require("./routes/snakescore.js"); 
+const snakepublicRoutes = require("./routes/snakepublic.js"); 
+
+
+
 
 app.use(cors());
 app.use(express.json());
@@ -25,7 +38,18 @@ app.use("/kyc",kycRoutes)
 app.use('/bankdata',bankRoutes)
 app.use('/recharge',rechargeRoutes)
 app.use('/gameuser',gameuserRoutes)
-app.use("/playingCTGData",playingctgRoutes)
+app.use("/pctg", playctgRoutes);
+app.use("/poolctg", playpoolctgRoutes);
+app.use("/dealctg", dealctgRoutes);
+app.use("/ludoplayctg", ludoctgRoutes);
+app.use("/snakeplayctg", snakectgRoutes);
+app.use("/ludopublic", ludopublicRoutes);
+app.use("/ludocounter", ludocounterRoutes);
+app.use("/snakecounter", snakecounterRoutes);
+app.use("/ludoscore", ludoscoreRoutes);
+app.use("/snakescore", snakescoreRoutes);
+app.use("/snakepublic", snakepublicRoutes);
+
 
 const PORT = 3001;
 mongoose.connect("mongodb://localhost:27017/HKI_neev")
