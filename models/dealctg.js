@@ -6,7 +6,7 @@ const dealCategorySchema = new Schema({
   reke: { type: Number, required: true }, 
   mode: { 
     type: String, 
-    enum: ['cash', 'other_modes'], 
+    enum: ['cash', 'other_modes', 'online'],
     required: true 
   },  
   deals: { type: Number, required: true }, 
@@ -14,8 +14,8 @@ const dealCategorySchema = new Schema({
   bonus: { type: Number, required: true }, 
   online_player: { type: Number, required: true },  
   leaderBoardScore: { type: Number, required: true },  
-  play_store: { type: Boolean, required: true }, 
-  _ip: { type: Boolean, required: true }, 
+  play_store: { type: String, required: true }, 
+  _ip: { type: String, required: true }, 
   freeWinGame: { type: Boolean, required: true },  
 }, {
   timestamps: true, 
