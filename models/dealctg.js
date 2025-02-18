@@ -14,9 +14,11 @@ const dealCategorySchema = new Schema({
   bonus: { type: Number, required: true }, 
   online_player: { type: Number, required: true },  
   leaderBoardScore: { type: Number, required: true },  
-  play_store: { type: String, required: true }, 
-  _ip: { type: String, required: true }, 
+  play_store: { type: Boolean, required: true }, 
+  _ip: { type: Boolean, required: true }, 
   freeWinGame: { type: Boolean, required: true },  
+
+
 }, {
   timestamps: true, 
   collection: 'deal_category'  

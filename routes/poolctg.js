@@ -41,6 +41,19 @@ router.patch("/poolctgData/:id", async (req, res) => {
     res.status(500).json({ message: "Failed to update data", error: err });
   }
 });
+// POST route to create a new Pool row
+router.post("/poolctgData", async (req, res) => {
+  try {
+    // Validate the incoming data to ensure it follows the schema
+    const newRow = new poolGame(req.body);
 
+    // Save the new row to the database
+    await newRow.save();
+    res.status(201).json(newRow); // Respond with the created row and a status of 201 (Created)
+  } catch (err) {
+    console.error("Error saving new row:", err);
+    res.status(500).json({ error: "Failed to save the row", details: err.message });
+  }
+});
 
 module.exports = router;

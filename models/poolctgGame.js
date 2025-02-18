@@ -2,22 +2,23 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const poolgameSchema = new Schema({
-  entryFee: { type: Number, required: true }, 
-  bonus: { type: Number, required: true },  
+
+  entryFee: { type: Number, required: true },  
+  reke: { type: Number, required: true }, 
+  pCount:{type:Number,required:true},
   mode: { 
     type: String, 
-    enum: ['cash', 'other_modes'], 
+    enum: ['cash', 'other_modes', 'online'],
     required: true 
   },  
-  pCount: { type: Number, required: true },
-  use_bot: { type: Boolean, required: true },  
-  reke: { type: Number, required: true },  
-  leaderBoardScore: { type: Number, required: true },  
+  use_bot: { type: Boolean, required: true }, 
+  bonus: { type: Number, required: true }, 
   online_player: { type: Number, required: true },  
-  _isTur: { type: Boolean, required: true }, 
-  play_store: { type: Boolean, required: true },  
-  _ip: { type: Boolean, required: true },
-  freeWinGame: { type: Boolean, required: true }, 
+  leaderBoardScore: { type: Number, required: true },  
+  play_store: { type: Boolean, required: true }, 
+  _ip: { type: Boolean, required: true }, 
+  freeWinGame: { type: Boolean, required: true },  
+ 
 }, {
   timestamps: true, 
   collection: 'poolctg' 
@@ -25,3 +26,10 @@ const poolgameSchema = new Schema({
 
 const poolGame = mongoose.model("poolGame", poolgameSchema);
 module.exports =poolGame;
+
+
+
+
+
+
+
