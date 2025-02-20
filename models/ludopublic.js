@@ -23,7 +23,7 @@ const ludopublicSchema = new Schema({
     play_store: { type: Boolean, default: false },
     first_game: { type: Boolean, default: false },
     order: { type: Number, required: true },
-    winAmount: { type: Number, required: true, default: 0 },
+    winAmount: { type: Number, required: true },
     leaderBoardScore: { type: Number, required: true },
     freeWinGame: { type: Boolean, default: false },
 

@@ -42,4 +42,21 @@ router.patch("/ludopublicctg/:id", async (req, res) => {
 
 
 
+// POST route to create a new deal row
+router.post("/ludopublicctg", async (req, res) => {
+  try {
+    // Validate the incoming data to ensure it follows the schema
+    const newRow = new ludopublicCtgData(req.body);
+
+    // Save the new row to the database
+    await newRow.save();
+    res.status(201).json(newRow); // Respond with the created row and a status of 201 (Created)
+  } catch (err) {
+    console.error("Error saving new row:", err);
+    res.status(500).json({ error: "Failed to save the row", details: err.message });
+  }
+});
+
+
+
 module.exports = router;
