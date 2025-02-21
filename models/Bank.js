@@ -82,3 +82,4 @@ const bankVerificationSchema = new Schema({
 const BankVerification = mongoose.model('BankVerificantion', bankVerificationSchema);
 
 module.exports = BankVerification;
+//welcome sharma ji
