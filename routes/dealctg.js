@@ -1,45 +1,49 @@
 
-const express = require("express");
-const router = express.Router();
+
+
+const router = require("express").Router();
 const dealctgData = require("../models/dealctg"); // Assuming your model is correctly defined in this file
 
-// Get all dealctg data
 router.get("/dealctgData", async (req, res) => {
   try {
     const response = await dealctgData.find({});
-    res.status(200).json(response); // Respond with all data in the database
+    console.log(response);
+    res.status(200).json(response); 
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Failed to fetch data", error: err });
+    res.status(500).json({ message: "Failed to fetch game data", error: err });
   }
 });
 
-// Update dealctg data by ID
+
+
+
 router.patch("/dealctgData/:id", async (req, res) => {
   try {
-    const _id = req.params.id.trim(); // Trim any extra spaces around the ID
+    const _id = req.params.id.trim();  // Trim the ID to remove any whitespace or newline characters
+    console.log("ID being updated: ", _id);
 
-    // Ensure the ID is a valid ObjectId (for MongoDB)
+    // Ensure the ID is a valid ObjectId
     if (!/^[0-9a-fA-F]{24}$/.test(_id)) {
       return res.status(400).json({ message: "Invalid ObjectId" });
     }
 
-    const updatedData = await dealctgData.findByIdAndUpdate(_id, req.body, {
-      new: true, // Return the updated data after the update operation
-    });
+    // Log the incoming request body to verify it
+    console.log("Request Body: ", req.body);
+
+    const updatedData = await dealctgData.findByIdAndUpdate(_id, req.body, { new: true });
 
     if (!updatedData) {
       return res.status(404).json({ message: "Data not found" });
     }
 
-    res.status(200).json(updatedData); // Return the updated data to the client
+    res.status(200).json(updatedData);
   } catch (err) {
     console.log("Error during update:", err);
     res.status(500).json({ message: "Failed to update data", error: err });
   }
 });
-
-// POST route to create a new deal row
+// POST route to create a new Pool row
 router.post("/dealctgData", async (req, res) => {
   try {
     // Validate the incoming data to ensure it follows the schema
@@ -55,5 +59,3 @@ router.post("/dealctgData", async (req, res) => {
 });
 
 module.exports = router;
-
-
