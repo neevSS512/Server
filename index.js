@@ -23,7 +23,7 @@ const ludoscoreRoutes = require("./routes/ludoscore.js");
 const snakescoreRoutes = require("./routes/snakescore.js"); 
 const snakepublicRoutes = require("./routes/snakepublic.js"); 
 const transactionRoutes=require("./routes/transaction.js");
-const gameconfigurationRoutes=require("./routes/gameconfigdata.js")
+const gameconfigurationRoutes =require("./routes/gameconfigdata.js")
 
 
 
