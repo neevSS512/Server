@@ -46,7 +46,6 @@ const flagsSchema = new mongoose.Schema({
 // Main User Schema
 const GameuserSchema = new mongoose.Schema({
     un: { type: String, default: '' },
-    Id:{type:String,  required: true,unique:true, default: 0},
     UserName: {
         type: String,
         required: true,

@@ -22,7 +22,9 @@ const snakecounterRoutes = require("./routes/snakecounter.js");
 const ludoscoreRoutes = require("./routes/ludoscore.js"); 
 const snakescoreRoutes = require("./routes/snakescore.js"); 
 const snakepublicRoutes = require("./routes/snakepublic.js"); 
+const transactionRoutes=require("./routes/transaction.js")
 
+// const gameConfigurationRoutes=require("./routes/gameconfigdata.js")
 
 
 
@@ -49,6 +51,9 @@ app.use("/snakecounter", snakecounterRoutes);
 app.use("/ludoscore", ludoscoreRoutes);
 app.use("/snakescore", snakescoreRoutes);
 app.use("/snakepublic", snakepublicRoutes);
+app.use('/transaction',transactionRoutes)
+// app.use('/gameconfigdata',gameConfigurationRoutes)
+
 
 
 const PORT = 3001;

@@ -23,7 +23,7 @@ const ludocountergameSchema = new mongoose.Schema({
   first_game: { type: Boolean, required: true },
   order: { type: Number, required: true },
   winAmount: { type: Number, default: 0 },
-  online_playerForTwo: { type: Number, required: true },
+  // online_playerForTwo: { type: Number, required: true },
   leaderBoardScore: { type: Number, required: true },
   freeWinGame: { type: Boolean, required: true }
 },
