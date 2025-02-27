@@ -1,6 +1,4 @@
 
-
-
 const router = require("express").Router();
 const dealctgData = require("../models/dealctg"); // Assuming your model is correctly defined in this file
 
@@ -57,5 +55,32 @@ router.post("/dealctgData", async (req, res) => {
     res.status(500).json({ error: "Failed to save the row", details: err.message });
   }
 });
+// DELETE route to delete a document by ID
+router.delete("/dealctgData/:id", async (req, res) => {
+  try {
+    const _id = req.params.id.trim(); // Trim the ID to remove any whitespace or newline characters
+    console.log("ID being deleted: ", _id);
+
+    // Ensure the ID is a valid ObjectId
+    if (!/^[0-9a-fA-F]{24}$/.test(_id)) {
+      return res.status(400).json({ message: "Invalid ObjectId" });
+    }
+
+    // Attempt to delete the document by ID
+    const deletedData = await dealctgData.findByIdAndDelete(_id);
+
+    // If the document is not found
+    if (!deletedData) {
+      return res.status(404).json({ message: "Data not found" });
+    }
+
+    // Return a success message and the deleted data
+    res.status(200).json({ message: "Data deleted successfully", data: deletedData });
+  } catch (err) {
+    console.log("Error during delete:", err);
+    res.status(500).json({ message: "Failed to delete data", error: err });
+  }
+});
+
 
 module.exports = router;
