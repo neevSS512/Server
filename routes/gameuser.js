@@ -1,21 +1,3 @@
-// const router = require("express").Router();
-// const Gameuser = require("../models/Gameuser");
-
-// router.get("/gameUsers",async(req,res)=>{
-//     try{
-//         const response=await Gameuser.find({})
-//         // console.log(response)
-//         res.status(200).json(response)     
-//     }
-//     catch(err){
-//         console.log(err)
-//         res.send(err)
-//     }
-// })
-
-// module.exports = router
-
-
 
 const router = require("express").Router();
 const Gameuser = require("../models/Gameuser");
@@ -46,6 +28,28 @@ router.get("/gameUsers/:MobileNo", async (req, res) => {
         res.status(500).send({ message: "Internal Server Error", error: err });
     }
 });
+router.patch("/gameUsers/:id", async (req, res) => {
+    try {
+      const _id = req.params.id.trim();
+      console.log("ID being updated: ", _id);
+  
+      if (!/^[0-9a-fA-F]{24}$/.test(_id)) {
+        return res.status(400).json({ message: "Invalid ObjectId" });
+      }
+      console.log("Request Body: ", req.body);
+  
+      const updatedData = await Gameuser.findByIdAndUpdate(_id, req.body, { new: true });
+  
+      if (!updatedData) {
+        return res.status(404).json({ message: "Data not found" });
+      }
+  
+      res.status(200).json(updatedData);
+    } catch (err) {
+      console.log("Error during update:", err);
+      res.status(500).json({ message: "Failed to update data", error: err });
+    }
+  });
 
 
 module.exports = router;
