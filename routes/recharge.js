@@ -37,4 +37,114 @@ router.post("/rechargeData", async (req, res) => {
         res.status(500).json({ message: "An error occurred while retrieving the data", error: err.message });
     }
 });
+
+
+// GET the total amount of all recharge data
+router.get("/totalAmount", async (req, res) => {
+    try {
+        // Aggregation query to sum all amounts
+        const result = await RechargeData.aggregate([
+            {
+                $group: {
+                    _id: null,  // No grouping by any field, just one result
+                    totalAmount: { $sum: "$amount" }  // Sum of the `amount` field across all documents
+                }
+            }
+        ]);
+
+        // Check if there is a result
+        if (result.length > 0) {
+            // Return the total amount
+            res.status(200).json({ totalAmount: result[0].totalAmount });
+        } else {
+            // If no data found, return 0
+            res.status(200).json({ totalAmount: 0 });
+        }
+    } catch (err) {
+        console.error("Error calculating total amount:", err);
+        res.status(500).json({ message: "An error occurred while calculating the total amount", error: err.message });
+    }
+});
+
+
+
+//txstatus 
+// router.get("/txStatusCounts", async (req, res) => {
+//     try {
+//         // Aggregation query to count the total success and pending
+//         const result = await RechargeData.aggregate([
+//             {
+//                 $match: { 
+//                     txStatus: { $in: ["success", "pending"] } // Match documents where txStatus is "success" or "pending"
+//                 }
+//             },
+//             {
+//                 $group: {
+//                     _id: "$txStatus",  // Group by the txStatus field
+//                     totalCount: { $sum: 1 }  // Sum the count of documents for each txStatus
+//                 }
+//             }
+//         ]);
+
+//         // Prepare the result with total counts for "success" and "pending"
+//         let totalSuccessCount = 0;
+//         let totalPendingCount = 0;
+
+//         // Process the result to extract the counts
+//         result.forEach(item => {
+//             if (item._id === "success") {
+//                 totalSuccessCount = item.totalCount; // Total count of "success"
+//             } else if (item._id === "pending") {
+//                 totalPendingCount = item.totalCount; // Total count of "pending"
+//             }
+//         });
+
+//         // Return the response with the total counts
+//         res.status(200).json({
+//             totalSuccess: totalSuccessCount,
+//             totalPending: totalPendingCount
+//         });
+
+//     } catch (err) {
+//         console.error("Error calculating txStatus counts:", err);
+//         res.status(500).json({ message: "An error occurred while calculating txStatus counts", error: err.message });
+//     }
+// });
+
+
+router.get("/txStatusCounts", async (req, res) => {
+    try {
+        const result = await RechargeData.aggregate([
+            {
+                $match: { 
+                    txStatus: { $in: ["success", "pending"] }
+                }
+            },
+            {
+                $group: {
+                    _id: "$txStatus",
+                    totalCount: { $sum: 1 }
+                }
+            }
+        ]);
+
+        let totalSuccessCount = 0;
+        let totalPendingCount = 0;
+
+        result.forEach(item => {
+            if (item._id === "success") totalSuccessCount = item.totalCount;
+            if (item._id === "pending") totalPendingCount = item.totalCount;
+        });
+
+        res.status(200).json({
+            totalSuccess: totalSuccessCount,
+            totalPending: totalPendingCount
+        });
+    } catch (error) {
+        console.error("Error calculating txStatus counts:", error);
+        res.status(500).json({ message: "An error occurred while calculating txStatus counts", error: error.message });
+    }
+});
+
+
 module.exports = router
