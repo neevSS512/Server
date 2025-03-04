@@ -18,7 +18,7 @@ router.get("/ludocounterctg", async (req, res) => {
 router.patch("/ludocounterctg/:id", async (req, res) => {
   try {
     const _id = req.params.id.trim();  // Trim the ID to remove any whitespace or newline characters
-    console.log("ID being updated: ", _id);
+    // console.log("ID being updated: ", _id);
 
     // Ensure the ID is a valid ObjectId
     if (!/^[0-9a-fA-F]{24}$/.test(_id)) {
@@ -26,7 +26,7 @@ router.patch("/ludocounterctg/:id", async (req, res) => {
     }
 
     // Log the incoming request body to verify it
-    console.log("Request Body: ", req.body);
+    // console.log("Request Body: ", req.body);
 
     const updatedData = await ludocounterCtgData.findByIdAndUpdate(_id, req.body, { new: true });
 
@@ -66,7 +66,7 @@ router.post("/ludocounterctg", async (req, res) => {
 router.delete("/ludocounterctg/:id", async (req, res) => {
   try {
     const _id = req.params.id.trim(); // Trim the ID to remove any whitespace or newline characters
-    console.log("ID being deleted: ", _id);
+    // console.log("ID being deleted: ", _id);
 
     // Ensure the ID is a valid ObjectId
     if (!/^[0-9a-fA-F]{24}$/.test(_id)) {

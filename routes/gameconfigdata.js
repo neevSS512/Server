@@ -15,7 +15,7 @@ router.get('/gameconfigurations', async (req, res) => {
 router.patch("/gameconfigurations/:id", async (req, res) => {
     try {
       const _id = req.params.id.trim();  
-      console.log("ID being updated: ", _id);
+      // console.log("ID being updated: ", _id);
   
       // Ensure the ID is a valid ObjectId
       if (!/^[0-9a-fA-F]{24}$/.test(_id)) {
@@ -23,7 +23,7 @@ router.patch("/gameconfigurations/:id", async (req, res) => {
       }
   
       // Log the incoming request body to verify it
-      console.log("Request Body: ", req.body);
+      // console.log("Request Body: ", req.body);
   
       const updatedData = await GameConfiguration.findByIdAndUpdate(_id, req.body, { new: true });
   
@@ -33,7 +33,7 @@ router.patch("/gameconfigurations/:id", async (req, res) => {
   
       res.status(200).json(updatedData);
     } catch (err) {
-      console.log("Error during update:", err);
+      // console.log("Error during update:", err);
       res.status(500).json({ message: "Failed to update data", error: err });
     }
   });

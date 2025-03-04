@@ -186,3 +186,14 @@ GameuserSchema.index({ unique_id: 1 });
 GameuserSchema.index({ mobile_no: 1 });
 
 module.exports = mongoose.model('users', GameuserSchema);
+
+
+
+
+
+
+
+
+
+
+

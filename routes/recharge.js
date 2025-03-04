@@ -66,58 +66,13 @@ router.get("/totalAmount", async (req, res) => {
     }
 });
 
-
-
-//txstatus 
-// router.get("/txStatusCounts", async (req, res) => {
-//     try {
-//         // Aggregation query to count the total success and pending
-//         const result = await RechargeData.aggregate([
-//             {
-//                 $match: { 
-//                     txStatus: { $in: ["success", "pending"] } // Match documents where txStatus is "success" or "pending"
-//                 }
-//             },
-//             {
-//                 $group: {
-//                     _id: "$txStatus",  // Group by the txStatus field
-//                     totalCount: { $sum: 1 }  // Sum the count of documents for each txStatus
-//                 }
-//             }
-//         ]);
-
-//         // Prepare the result with total counts for "success" and "pending"
-//         let totalSuccessCount = 0;
-//         let totalPendingCount = 0;
-
-//         // Process the result to extract the counts
-//         result.forEach(item => {
-//             if (item._id === "success") {
-//                 totalSuccessCount = item.totalCount; // Total count of "success"
-//             } else if (item._id === "pending") {
-//                 totalPendingCount = item.totalCount; // Total count of "pending"
-//             }
-//         });
-
-//         // Return the response with the total counts
-//         res.status(200).json({
-//             totalSuccess: totalSuccessCount,
-//             totalPending: totalPendingCount
-//         });
-
-//     } catch (err) {
-//         console.error("Error calculating txStatus counts:", err);
-//         res.status(500).json({ message: "An error occurred while calculating txStatus counts", error: err.message });
-//     }
-// });
-
-
+// GET the total success and pending of all Recharge data
 router.get("/txStatusCounts", async (req, res) => {
     try {
         const result = await RechargeData.aggregate([
             {
                 $match: { 
-                    txStatus: { $in: ["success", "pending"] }
+                    txStatus: { $in: ["Success", "Pending"] }
                 }
             },
             {
@@ -132,8 +87,8 @@ router.get("/txStatusCounts", async (req, res) => {
         let totalPendingCount = 0;
 
         result.forEach(item => {
-            if (item._id === "success") totalSuccessCount = item.totalCount;
-            if (item._id === "pending") totalPendingCount = item.totalCount;
+            if (item._id === "Success") totalSuccessCount = item.totalCount;
+            if (item._id === "Pending") totalPendingCount = item.totalCount;
         });
 
         res.status(200).json({

@@ -57,4 +57,43 @@ router.get("/totalWithdraw", async (req, res) => {
     }
 });
 
+
+
+// GET the total success and pending of all withdraw data
+
+router.get("/StatusCounts", async (req, res) => {
+    try {
+        const result = await WithdrawData.aggregate([
+            {
+                $match: { 
+                    status: { $in: ["Success", "Pending"] }
+                }
+            },
+            {
+                $group: {
+                    _id: "$status",
+                    totalCount: { $sum: 1 }
+                }
+            }
+        ]);
+
+        let totalSuccessCount = 0;
+        let totalPendingCount = 0;
+
+        result.forEach(item => {
+            if (item._id === "Success") totalSuccessCount = item.totalCount;
+            if (item._id === "Pending") totalPendingCount = item.totalCount;
+        });
+
+        res.status(200).json({
+            totalSuccessW: totalSuccessCount,
+            totalPendingW: totalPendingCount
+        });
+    } catch (error) {
+        console.error("Error calculating Status counts:", error);
+        res.status(500).json({ message: "An error occurred while calculating Status counts", error: error.message });
+    }
+});
+
+
 module.exports = router
