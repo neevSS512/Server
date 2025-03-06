@@ -1,36 +1,30 @@
-// const mongoose = require('mongoose');
 
-// // Player schema
-// const playerSchema = mongoose.Schema({
-//     name: { type: String, required: true },
-//     id: { type: String, required: true },
-// });
+const mongoose = require('mongoose');
 
-// // Main schema
-// const schema = mongoose.Schema({
+// Main schema
+const schema = mongoose.Schema({
 //     action: {
 //         type: String,
 //         default: '',
-//         required: true, 
+//         required: true,
 //     },
 //     value: {
 //         type: String,
 //         default: '',
-//         required: true,  
+//         required: true, 
 //     },
 //     sDate: {
 //         type: Date,
-//         default: Date.now,
-//         required: true, 
+//         default:null,
 //     },
 //     eDate: {
 //         type: Date,  
 //         default: null,  
 //     },
 //     player: {
-//         type: playerSchema, 
-//         default: {},
-//         required: true,  
+//         type: Object,  
+//         default: {},    
+//         required: false,  // It's now optional
 //     },
 //     bonus_type: {
 //         type: String,
@@ -49,70 +43,61 @@
 //         default: 0,
 //     },
 //     state: {
-//         type: [String],  // If it's an array of strings (e.g., states or statuses), define it clearly
+//         type: [String],
 //         default: [],
 //     },
 // },
 // {
 //     versionKey: false,
-//     timestamps: true,  // Automatically adds createdAt and updatedAt
+//     timestamps: true,
 //     collection: 'game_configurations',
 // });
 
-// module.exports = mongoose.model('gameconfiguration', schema);
 
-const mongoose = require('mongoose');
-
-// Main schema
-const schema = mongoose.Schema({
-    action: {
-        type: String,
-        default: '',
-        required: true,
-    },
-    value: {
-        type: String,
-        default: '',
-        required: true, 
-    },
-    sDate: {
-        type: Date,
-        default:null,
-    },
-    eDate: {
-        type: Date,  
-        default: null,  
-    },
-    player: {
-        type: Object,  
-        default: {},    
-        required: false,  // It's now optional
-    },
-    bonus_type: {
-        type: String,
-        default: '',
-    },
-    increment_counter: {
-        type: Number,
-        default: 0,
-    },
-    final_counter: {
-        type: Number,
-        default: 0,
-    },
-    cash: {
-        type: Number,
-        default: 0,
-    },
-    state: {
-        type: [String],
-        default: [],
-    },
+action: {
+    type: String,
+    default: ''
 },
-{
-    versionKey: false,
-    timestamps: true,
-    collection: 'game_configurations',
+value: {
+    type: String,
+    default: ''
+},
+sDate: {
+    type: Date,
+    default: Date.now
+},
+eDate: {
+    type: String,
+    default: ''
+},
+player: {
+    type: Object,
+    default: {}
+},
+bonus_type: {
+    type: String,
+    default: ''
+},
+increment_counter: {
+    type: Number,
+    default: 0
+},
+final_counter: {
+    type: Number,
+    default: 0
+},
+cash: {
+    type: Number,
+    default: 0
+},
+state: {
+    type: Array,
+    default: []
+}
+}, {
+versionKey: false,
+timestamps: true,
+collection: 'game_configurations'
 });
 
 module.exports = mongoose.model('gameconfiguration', schema);

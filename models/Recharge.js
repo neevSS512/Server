@@ -42,7 +42,7 @@ const rechargeSchema = new Schema({
   updatedAt: { type: Date, required: true }
 },
  { timestamps: true,
-   collection:'payment-request'
+   collection:'payment_request'
   }
 );
 

@@ -167,7 +167,8 @@ const GameuserSchema = new mongoose.Schema({
          default: 'bronze',
          enum:["bronze","silver","gold","diamond"]
            },
-    referalCount: { type: Number, default: 0 },
+    
+    totalGameOfReferedUser: { type: Number, default: 0 },
     totalReferalEarning: { type: Number, default: 0 },
     totalGameOfReferedUser: { type: Number, default: 0 },
     totalGameplayafterRefer: { type: Number, default: 0 },

@@ -72,7 +72,7 @@ router.get("/txStatusCounts", async (req, res) => {
         const result = await RechargeData.aggregate([
             {
                 $match: { 
-                    txStatus: { $in: ["Success", "Pending"] }
+                    txStatus: { $in: ["SUCCESS", "PENDING"] }
                 }
             },
             {
@@ -87,8 +87,8 @@ router.get("/txStatusCounts", async (req, res) => {
         let totalPendingCount = 0;
 
         result.forEach(item => {
-            if (item._id === "Success") totalSuccessCount = item.totalCount;
-            if (item._id === "Pending") totalPendingCount = item.totalCount;
+            if (item._id === "SUCCESS") totalSuccessCount = item.totalCount;
+            if (item._id === "PENDING") totalPendingCount = item.totalCount;
         });
 
         res.status(200).json({

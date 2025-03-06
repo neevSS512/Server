@@ -59,11 +59,12 @@ router.post("/login", async (req, res) => {
     }
 
     // Compare the password with the hashed password
-    const isMatch = await bcrypt.compare(password, user.password);  // user.password is the hashed password from DB
-    if (!isMatch) {
+    // const isMatch = await bcrypt.compare(password, user.password);  // user.password is the hashed password from DB
+   
+    const isMatch = (password === user.password) ? true : false;
+     if (!isMatch) {
       return res.status(400).json({ message: "Email or Password is incorrect" });
     }
-
     // Generate JWT token (with a secret from environment variables)
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
@@ -78,4 +79,19 @@ router.post("/login", async (req, res) => {
   }
 });
 
+
+
+
+router.get('/loginuser', async (req, res) => {
+    try {
+        const gameuser = await User.find();  
+        return res.status(200).json(gameuser);  
+    } catch (error) {
+        return res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
 module.exports = router;
+
+
+

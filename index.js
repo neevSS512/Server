@@ -57,13 +57,34 @@ app.use('/gameconfigdata',gameconfigurationRoutes)
 
 
 const PORT = 3001;
-mongoose.connect("mongodb://localhost:27017/HKI_neev")
-  // .connect("process.env.MONGO_URL", {
-  //   dbName: "HKI",
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  // })
+// mongoose.connect("mongodb://localhost:27017/HKI_neev")
+//   // .connect("process.env.MONGO_URL", {
+//   //   dbName: "HKI",
+//   //   useNewUrlParser: true,
+//   //   useUnifiedTopology: true,
+//   // })
+//   .then(() => {
+//     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+//   })
+//   .catch((err) => console.log(`${err} did not connect`));
+
+
+mongoose
+  .connect(`${process.env.MONGO_URL}/${process.env.DB_NAME}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
   })
-  .catch((err) => console.log(`${err} did not connect`));
+  .catch((err) => {
+    console.log("MongoDB connection error:", err.message);  // Log error message
+    console.log("Full error object:", err);  // Log full error object for more details
+  });
+
+
+
+
+
+
+
