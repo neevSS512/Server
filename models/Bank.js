@@ -143,7 +143,7 @@ const bankVerificationSchema = new Schema({
 }, {
 	versionKey: false,
 	timestamps: true,
-	collection: 'bankData'
+	collection: 'user_bank_documents'
 });
 
 

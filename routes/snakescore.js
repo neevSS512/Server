@@ -8,7 +8,7 @@ const snakescoreCtgData = require("../models/snakescore");
 // GET all Ludo Playing Category data
 router.get("/snakescorectg", async (req, res) => {
   try {
-    const response = await snakescoreCtgData.find({});  // Fetch all data from the collection
+    const response = await snakescoreCtgData.find({ modeType: 'score' });  // Fetch all data from the collection
     res.status(200).json(response);  // Send the response as JSON
   } catch (err) {
     console.log(err);

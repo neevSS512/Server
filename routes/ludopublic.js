@@ -4,7 +4,9 @@ const ludopublicCtgData = require("../models/ludopublic");  // Your model
 // GET all Ludo Playing Category data
 router.get("/ludopublicctg", async (req, res) => {
   try {
-    const response = await ludopublicCtgData.find({});  // Fetch all data from the collection
+    // Fetch all documents where 'modeType' is 'public'
+    const response = await ludopublicCtgData.find({ modeType: 'public' });
+
     res.status(200).json(response);  // Send the response as JSON
   } catch (err) {
     console.log(err);
@@ -85,3 +87,22 @@ router.delete("/ludopublicctg/:id", async (req, res) => {
 });
 
 module.exports = router;
+
+
+
+// const router = require("express").Router();
+// const ludopublicCtgData = require("../models/ludopublic");  // Your model
+
+// router.get("/ludopublicctg", async (req, res) => {
+//   try {
+//     // Fetch all documents where 'modeType' is 'public'
+//     const response = await ludopublicCtgData.find({ modeType: 'public' });
+
+//     res.status(200).json(response);  // Send the response as JSON
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ message: "Failed to fetch game data", error: err });  // Handle error
+//   }
+// });
+
+// module.exports = router;

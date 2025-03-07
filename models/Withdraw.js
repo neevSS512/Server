@@ -157,7 +157,7 @@ const withdrawSchema = new Schema({
   }
 },
 { timestamps: true,
-  collection:'withdraw-request'
+  collection:'withdraw_request'
  }
 );
 const Withdraw = mongoose.model('Withdraw', withdrawSchema);

@@ -6,7 +6,7 @@ const snakecounterCtgData = require("../models/snakecounter");
 // GET all Ludo Playing Category data
 router.get("/snakecounterctg", async (req, res) => {
   try {
-    const response = await snakecounterCtgData.find({});  // Fetch all data from the collection
+    const response = await snakecounterCtgData.find({ modeType: 'counter' });  // Fetch all data from the collection
     res.status(200).json(response);  // Send the response as JSON
   } catch (err) {
     console.log(err);

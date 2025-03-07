@@ -9,7 +9,7 @@ const snakepublicCtgData = require("../models/snakepublic");
 // GET all Ludo Playing Category data
 router.get("/snakepublicctg", async (req, res) => {
   try {
-    const response = await snakepublicCtgData.find({});  // Fetch all data from the collection
+    const response = await snakepublicCtgData.find({ modeType: 'public' });  // Fetch all data from the collection
     res.status(200).json(response);  // Send the response as JSON
   } catch (err) {
     console.log(err);

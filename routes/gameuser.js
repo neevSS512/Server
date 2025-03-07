@@ -4,7 +4,7 @@ const Gameuser = require("../models/Gameuser");
 // Get all users
 router.get("/gameUsers", async (req, res) => {
   try {
-    const response = await Gameuser.find({}).limit(50); // Optional: limit to 50 results
+    const response = await Gameuser.find({})
     res.status(200).json(response);
   } catch (err) {
     console.error("Error fetching game users:", err);
@@ -27,11 +27,11 @@ router.get("/gameUsers/:MobileNo", async (req, res) => {
   }
 });
 
-// Update user data
+// // Update user data
 router.patch("/gameUsers/:id", async (req, res) => {
   try {
     const _id = req.params.id.trim();
-    console.log("ID being updated: ", _id);
+    // console.log("ID being updated: ", _id);
 
     if (!/^[0-9a-fA-F]{24}$/.test(_id)) {
       return res.status(400).json({ message: "Invalid ObjectId" });
@@ -52,6 +52,9 @@ router.patch("/gameUsers/:id", async (req, res) => {
     res.status(500).json({ message: "Failed to update data", error: err });
   }
 });
+
+
+
 
 // Get the total number of users
 router.get("/total-users", async (req, res) => {

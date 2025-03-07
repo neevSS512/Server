@@ -56,7 +56,7 @@ app.use('/gameconfigdata',gameconfigurationRoutes)
 
 
 
-const PORT = 3001;
+const PORT = 3001
 // mongoose.connect("mongodb://localhost:27017/HKI_neev")
 //   // .connect("process.env.MONGO_URL", {
 //   //   dbName: "HKI",

@@ -53,7 +53,6 @@ const schema = mongoose.Schema({
 //     collection: 'game_configurations',
 // });
 
-
 action: {
     type: String,
     default: ''

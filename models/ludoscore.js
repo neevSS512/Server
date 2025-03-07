@@ -1,40 +1,83 @@
 const mongoose = require('mongoose');
 
-const prizeDistributionSchema = new mongoose.Schema({
-  rank: { type: Number, required: true },
-  prizeRatio: { type: Number, required: true }
-});
-
 const ludoscorePlayingCategorySchema = new mongoose.Schema({
-  entryFee: { type: String, required: true },
-  bonus: { type: Number, required: true },
-  type: { type: String, enum: ['CASH', 'OTHER',], required: true },
-  botsAllowed: { type: Boolean, required: true },
-  rake: { type: Number, required: true },
-  allowedPlayer: { type: Number, required: true },
-  online_player: { type: Number, required: true },
-  prizeDistributionRatio: [prizeDistributionSchema],
-  modeType: { type: String, required: true },
-  targetScore: { type: Number, default: null },
-  isdelete: { type: Number, default: 0 },
-  _ip: { type: Boolean, required: true },
-  gst: { type: Number, required: true },
-  play_store: { type: Boolean, required: true },
-  first_game: { type: Boolean, required: true },
-  order: { type: Number, required: true },
-  winAmount: { type: Number, default: 0 },
-//   online_playerForTwo: { type: Number, required: true },
-  leaderBoardScore: { type: Number, required: true },
-  freeWinGame: { type: Boolean, required: true }
-}
-,
-{
-    timestamps: true,
-    collection:'ludo_score'
- }
-
-
-);
+  entryFee: {
+		type: String,
+		default: ''
+	},
+    bonus: {
+		type: Number,
+		default: 0
+	},
+    type: {
+		type: String,
+		default: ''
+	},
+    botsAllowed: {
+		type: Boolean,
+		default: false
+	},
+    rake: {
+		type: Number,
+		default: ''
+	},
+    allowedPlayer: {
+		type: Number,
+		default: 0
+	},
+    online_player: {
+		type: Number,
+		default: 0
+	},
+    prizeDistributionRatio: {
+        type: Object,
+		default: []
+    },
+	modeType: {
+		type: String,
+		default: ''
+	},
+	targetScore: {
+		type: Number,
+		default: 0
+	},
+	_ip: {
+		type: Boolean,
+		default: false
+	},
+	_isTur: {
+		type: Boolean,
+		default: false
+	},
+	gst: {
+		type: Number,
+		default: 0
+	},
+	play_store: {
+		type: Boolean,
+		default: false
+	},
+	order: {
+		type: Number,
+		default: 1
+	},
+	winAmount: {
+		type: Number,
+		default: 1
+	},
+	leaderBoardScore: {
+		type: Number,
+		default: 0
+	},
+	freeWinGame: {
+		type: Boolean,
+		default: false
+	}
+}, {
+	versionKey: false,
+	timestamps: true,
+	collection: 'ludo_playing_category'
+});
 
 const ludoscore = mongoose.model('ludoscore', ludoscorePlayingCategorySchema);
 

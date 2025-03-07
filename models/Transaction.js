@@ -203,7 +203,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const transactionSchema = new Schema({
-  uid: {
+    uid: {
 		type: mongoose.Schema.Types.ObjectId,
 		default: ''
 	},

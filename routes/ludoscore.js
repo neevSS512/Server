@@ -4,7 +4,7 @@ const ludoscoreCtgData = require("../models/ludoscore");  // Your model
 // GET all Ludo Playing Category data
 router.get("/ludoscorectg", async (req, res) => {
   try {
-    const response = await ludoscoreCtgData.find({});  // Fetch all data from the collection
+    const response = await ludoscoreCtgData.find({ modeType: 'score' });  // Fetch all data from the collection
     res.status(200).json(response);  // Send the response as JSON
   } catch (err) {
     console.log(err);

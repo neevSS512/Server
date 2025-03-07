@@ -30,7 +30,7 @@ router.post("/rechargeData", async (req, res) => {
             return res.status(404).json({ message: "No data found for the provided information" });
         }
 
-        console.log(response);
+        // console.log(response);
         res.status(200).json(response);
     } catch (err) {
         console.error(err);
@@ -72,7 +72,7 @@ router.get("/txStatusCounts", async (req, res) => {
         const result = await RechargeData.aggregate([
             {
                 $match: { 
-                    txStatus: { $in: ["SUCCESS", "PENDING"] }
+                    txStatus: { $in: ["SUCCESS", "PENDING","FAILED"] }
                 }
             },
             {
@@ -85,15 +85,19 @@ router.get("/txStatusCounts", async (req, res) => {
 
         let totalSuccessCount = 0;
         let totalPendingCount = 0;
+        let totalFailedCount = 0;
 
         result.forEach(item => {
             if (item._id === "SUCCESS") totalSuccessCount = item.totalCount;
             if (item._id === "PENDING") totalPendingCount = item.totalCount;
+            if (item._id === "FAILED") totalFailedCount = item.totalCount;
         });
 
         res.status(200).json({
             totalSuccess: totalSuccessCount,
-            totalPending: totalPendingCount
+            totalPending: totalPendingCount,
+            totalFailed:totalFailedCount
+            
         });
     } catch (error) {
         console.error("Error calculating txStatus counts:", error);

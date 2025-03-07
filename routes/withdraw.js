@@ -20,7 +20,7 @@ router.post("/withdrawData",async(req,res)=>{
         ({ 
             transferid:transferid,
          });
-        console.log(response)
+        // console.log(response)
         res.status(200).json(response)       
     }
     catch(err){
