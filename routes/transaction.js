@@ -21,7 +21,7 @@ const router =require("express").Router()
 const TransactionData=require('../models/Transaction')
 router.get("/transactionData", async (req, res) => {
     try {
-        const response = await TransactionData.find({})
+        const response = await TransactionData.find({}).limit(30)
         // console.log(response);
         res.status(200).json(response);     
     } catch (err) {

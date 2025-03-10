@@ -5,7 +5,7 @@ const GameConfiguration = require('../models/Gameconfig');
 // GET request to fetch all game configurations
 router.get('/gameconfigurations', async (req, res) => {
     try {
-        const gameConfigurations = await GameConfiguration.find()
+        const gameConfigurations = await GameConfiguration.find({}).limit(30)
         return res.status(200).json(gameConfigurations);  
     } catch (error) {
         return res.status(500).json({ message: 'Server error', error: error.message });

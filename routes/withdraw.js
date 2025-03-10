@@ -3,7 +3,7 @@ const WithdrawData = require("../models/Withdraw");
 
 router.get("/withdrawData",async(req,res)=>{
     try{
-        const response=await WithdrawData.find({})
+        const response=await WithdrawData.find({}).limit(30)
         // console.log(response)
         res.status(200).json(response)       
     }
@@ -92,6 +92,77 @@ router.get("/StatusCounts", async (req, res) => {
     } catch (error) {
         console.error("Error calculating Status counts:", error);
         res.status(500).json({ message: "An error occurred while calculating Status counts", error: error.message });
+    }
+});
+
+
+
+// For fetching all withdraw details by mobile_no
+// router.get("/withdrawDetailsByMobile/:phn", async (req, res) => {
+//     const { phn } = req.params;
+
+//     if (!phn) {
+//         return res.status(400).json({ error: true, message: "mobile_no is required" });
+//     }
+
+//     console.log("Received mobile_no:", phn);
+
+//     try {
+//         // Fetch all withdrawal details where mobile_no matches
+//         const withdrawDetails = await WithdrawData.find({ phn })
+//             .sort({ date: -1 }); // Sorting by date in descending order to get the latest first
+
+//         if (withdrawDetails.length === 0) {
+//             return res.status(404).json({ error: true, message: "No withdrawal details found for the provided mobile number" });
+//         }
+
+//         console.log("Withdrawal details:", withdrawDetails);
+
+//         // Return the details
+//         res.status(200).json({
+//             phn,
+//             withdrawDetails
+//         });
+//     } catch (err) {
+//         console.error("Error fetching withdrawal details:", err);
+//         res.status(500).json({ error: true, message: "An error occurred while fetching withdrawal details", error: err.message });
+//     }
+// });
+
+
+
+
+
+
+// Backend API to fetch withdrawal details by mobile number
+router.get("/withdrawDetailsByMobile/:phn", async (req, res) => {
+    const { phn } = req.params;
+
+    if (!phn) {
+        return res.status(400).json({ error: true, message: "mobile_no is required" });
+    }
+
+    console.log("Received mobile_no:", phn);
+
+    try {
+        // Fetch all withdrawal details where mobile_no matches
+        const withdrawDetails = await WithdrawData.find({ phn })
+            .sort({ date: -1 }); // Sorting by date in descending order to get the latest first
+
+        console.log("Fetched Withdraw Details:", withdrawDetails);
+
+        if (withdrawDetails.length === 0) {
+            return res.status(404).json({ error: true, message: "No withdrawal details found for the provided mobile number" });
+        }
+
+        // Return the details
+        res.status(200).json({
+            phn,
+            withdrawDetails
+        });
+    } catch (err) {
+        console.error("Error fetching withdrawal details:", err);
+        res.status(500).json({ error: true, message: "An error occurred while fetching withdrawal details", error: err.message });
     }
 });
 

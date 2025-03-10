@@ -2,7 +2,7 @@ const router = require("express").Router();
 const RechargeData = require("../models/Recharge")
 router.get("/rechargeData",async(req,res)=>{
     try{
-        const response=await RechargeData.find({})
+        const response=await RechargeData.find({}).limit(30)
         // console.log(response)
         res.status(200).json(response)     
     }
@@ -104,6 +104,123 @@ router.get("/txStatusCounts", async (req, res) => {
         res.status(500).json({ message: "An error occurred while calculating txStatus counts", error: error.message });
     }
 });
+
+
+router.get("/depositCountById/:mobile_no", async (req, res) => {
+    const { mobile_no } = req.params; 
+
+    if (!mobile_no) {
+        return res.status(400).json({ message: "mobile_no is required" });
+    }
+
+    console.log("Received mobile_no:", mobile_no); 
+
+    try {
+        // Count the documents where mobile_no matches
+        const depositCount = await RechargeData.countDocuments({ mobile_no });
+
+        console.log("Deposit count:", depositCount); 
+
+        res.status(200).json({
+            mobile_no,
+            depositCount
+        });
+    } catch (err) {
+        console.error("Error counting deposits:", err);
+        res.status(500).json({ message: "An error occurred while counting deposits", error: err.message });
+    }
+});
+
+
+
+
+
+
+
+
+// for fetching all deta
+router.get("/depositDetailsById/:mobile_no", async (req, res) => {
+    const { mobile_no } = req.params;
+
+    if (!mobile_no) {
+        return res.status(400).json({ error: true, message: "mobile_no is required" });
+    }
+
+    console.log("Received mobile_no:", mobile_no);
+
+    try {
+        // Fetch all recharge details where mobile_no matches
+        const rechargeDetails = await RechargeData.find({ mobile_no }).sort({ transDate: -1 });
+
+        if (rechargeDetails.length === 0) {
+            return res.status(404).json({ error: true, message: "No recharge details found for the provided mobile number" });
+        }
+
+        console.log("Recharge details:", rechargeDetails);
+
+        // Return the details
+        res.status(200).json({
+            mobile_no,
+            rechargeDetails
+        });
+    } catch (err) {
+        console.error("Error fetching recharge details:", err);
+        res.status(500).json({ error: true, message: "An error occurred while fetching recharge details", error: err.message });
+    }
+});
+
+
+
+
+// router.get("/depositDetailsById/:mobile_no", async (req, res) => {
+//     const { mobile_no } = req.params;
+//     const { page = 1, limit = 7 } = req.query; // Default page is 1, and limit is 10
+
+//     if (!mobile_no) {
+//         return res.status(400).json({ error: true, message: "mobile_no is required" });
+//     }
+
+//     console.log("Received mobile_no:", mobile_no);
+
+//     try {
+//         const skip = (page - 1) * limit;
+        
+//         // Fetch all recharge details with pagination
+//         const rechargeDetails = await RechargeData.find({ mobile_no })
+//             .sort({ transDate: -1 }) // Sort by transaction date (newest first)
+//             .skip(skip)              // Skip the previous pages' records
+//             .limit(parseInt(limit)); // Limit the number of records per page
+
+//         const totalRecords = await RechargeData.countDocuments({ mobile_no }); // Total records for pagination
+
+//         if (rechargeDetails.length === 0) {
+//             return res.status(404).json({ error: true, message: "No recharge details found for the provided mobile number" });
+//         }
+
+//         console.log("Recharge details:", rechargeDetails);
+
+//         // Return paginated results
+//         res.status(200).json({
+//             mobile_no,
+//             rechargeDetails,
+//             pagination: {
+//                 totalRecords,
+//                 totalPages: Math.ceil(totalRecords / limit),
+//                 currentPage: page,
+//                 pageSize: limit
+//             }
+//         });
+//     } catch (err) {
+//         console.error("Error fetching recharge details:", err);
+//         res.status(500).json({ error: true, message: "An error occurred while fetching recharge details", error: err.message });
+//     }
+// });
+
+
+
+
+
+
 
 
 module.exports = router

@@ -22,7 +22,7 @@ const router =require("express").Router()
 const bankDatas =require("../models/Bank")
 router.get("/bankData", async (req, res) => {
     try {
-        const response = await bankDatas.find({})
+        const response = await bankDatas.find({}).limit(30)
         // console.log(response);
         res.status(200).json(response);     
     } catch (err) {
