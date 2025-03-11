@@ -24,6 +24,7 @@ const snakescoreRoutes = require("./routes/snakescore.js");
 const snakepublicRoutes = require("./routes/snakepublic.js"); 
 const transactionRoutes=require("./routes/transaction.js");
 const gameconfigurationRoutes =require("./routes/gameconfigdata.js")
+const matchTrackDataRoutes=require("./routes/matchTrackData.js")
 
 
 
@@ -53,6 +54,7 @@ app.use("/snakescore", snakescoreRoutes);
 app.use("/snakepublic", snakepublicRoutes);
 app.use('/transaction',transactionRoutes);
 app.use('/gameconfigdata',gameconfigurationRoutes)
+app.use('/matchTrackData',matchTrackDataRoutes)
 
 
 
