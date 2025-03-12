@@ -26,4 +26,22 @@ router.get("/kycDataByUid/:uid", async (req, res) => {
         res.status(500).send({ message: "Server error." });
     }
 });
+router.get("/kyccData/:userId", async (req, res) => {
+  const userId = req.params.userId; 
+  try {
+    const matches = await Kyc.find({ "users.uid": userId }) 
+      .sort({ cd: -1 }) 
+      .limit(7); 
+    
+    if (!matches.length) {
+      return res.status(404).json({ message: "No matches found for this user" });
+    }
+    console.log(matches)
+    res.status(200).json(matches); 
+  } catch (err) {
+    console.error("Error fetching kyc data:", err);
+    res.status(500).json({ message: "Failed to fetch kyc data", error: err });
+  }
+});
+
 module.exports = router

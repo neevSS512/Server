@@ -174,7 +174,7 @@ router.get("/depositCountById/:mobile_no", async (req, res) => {
 
 router.get("/depositDetailsById/:mobile_no", async (req, res) => {
     const { mobile_no } = req.params;
-    const { page = 1, limit = 10 } = req.query; // Default page is 1, and limit is 10
+    const { page = 1, limit = 5 } = req.query; 
 
     if (!mobile_no) {
         return res.status(400).json({ error: true, message: "mobile_no is required" });
