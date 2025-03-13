@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const WithdrawData = require("../models/Withdraw");
-
+const Gameuser = require("../models/Gameuser");
 router.get("/withdrawData",async(req,res)=>{
     try{
-        const response=await WithdrawData.find({}).limit(30)
+        const response=await WithdrawData.find({})
         // console.log(response)
         res.status(200).json(response)       
     }
@@ -97,32 +97,40 @@ router.get("/StatusCounts", async (req, res) => {
 
 
 
-// For fetching all withdraw details by mobile_no
-router.get("/withdrawDetailsByMobile/:phn", async (req, res) => {
-    const { phn } = req.params;
 
-    if (!phn) {
+
+
+
+
+
+
+router.get("/getWithdrawDetails", async (req, res) => {
+    const { mobile_no } = req.query;  // mobile_no sent as a query parameter
+    if (!mobile_no) {
         return res.status(400).json({ error: true, message: "mobile_no is required" });
     }
-
-    console.log("Received mobile_no:", phn);
+    
+    console.log("Received mobile_no:", mobile_no);
 
     try {
-        // Fetch all withdrawal details where mobile_no matches
-        const withdrawDetails = await WithdrawData.find({ phn })
-            .sort({ date: -1 }); // Sorting by date in descending order to get the latest first
+        
+        const gameUser = await Gameuser.findOne({ mobile_no });
 
-        if (withdrawDetails.length === 0) {
-            return res.status(404).json({ error: true, message: "No withdrawal details found for the provided mobile number" });
+        if (!gameUser) {
+            return res.status(404).json({ error: true, message: "User not found with the provided mobile number" });
         }
 
-        console.log("Withdrawal details:", withdrawDetails);
+        const withdrawDetails = await WithdrawData.find({ phn: mobile_no }).sort({ date: -1 });
 
-        // Return the details
+        if (withdrawDetails.length === 0) {
+            return res.status(404).json({ error: true, message: "No withdrawal details found of this user" });
+        }
+
         res.status(200).json({
-            phn,
-            withdrawDetails
+            mobile_no,
+            withdrawDetails,
         });
+
     } catch (err) {
         console.error("Error fetching withdrawal details:", err);
         res.status(500).json({ error: true, message: "An error occurred while fetching withdrawal details", error: err.message });
@@ -131,87 +139,38 @@ router.get("/withdrawDetailsByMobile/:phn", async (req, res) => {
 
 
 
-
-
-
-// Backend API to fetch withdrawal details by mobile number
-// router.get("/withdrawDetailsByMobile/:phn", async (req, res) => {
-//     const { phn } = req.params;
-
-//     if (!phn) {
-//         return res.status(400).json({ error: true, message: "mobile_no is required" });
-//     }
-
-//     console.log("Received mobile_no:", phn);
-
-//     try {
-//         // Fetch all withdrawal details where mobile_no matches
-//         const withdrawDetails = await WithdrawData.find({ phn })
-//             .sort({ date: -1 }); // Sorting by date in descending order to get the latest first
-
-//         console.log("Fetched Withdraw Details:", withdrawDetails);
-
-//         if (withdrawDetails.length === 0) {
-//             return res.status(404).json({ error: true, message: "No withdrawal details found for the provided mobile number" });
-//         }
-
-//         // Return the details
-//         res.status(200).json({
-//             phn,
-//             withdrawDetails
-//         });
-//     } catch (err) {
-//         console.error("Error fetching withdrawal details:", err);
-//         res.status(500).json({ error: true, message: "An error occurred while fetching withdrawal details", error: err.message });
-//     }
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-// //with limit of documents
-router.get("/withdrawDetailsByMobile/:phn", async (req, res) => {
-    const { phn } = req.params;
-    let { limit } = req.query;
-
-    if (!phn) {
-        return res.status(400).json({ error: true, message: "mobile_no is required" });
-    }
-
-    console.log("Received mobile_no:", phn);
-
-    limit = parseInt(limit) || 100; 
-
+// Get count of total withdraw in the last 7 days
+// Get total deposit in the last 7 days
+router.get("/totalDepositLast7Days", async (req, res) => {
     try {
-        const withdrawDetails = await WithdrawData.find({ phn })
-            .sort({ date: -1 }) 
-            .limit(limit);      
-        console.log("Fetched Withdraw Details:", withdrawDetails);
-
-        if (withdrawDetails.length === 0) {
-            return res.status(404).json({ error: true, message: "No withdrawal details found for the provided mobile number" });
-        }
-
-      
-        res.status(200).json({
-            phn,
-            withdrawDetails
-        });
-    } catch (err) {
-        console.error("Error fetching withdrawal details:", err);
-        res.status(500).json({ error: true, message: "An error occurred while fetching withdrawal details", error: err.message });
-    }
-});
-
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7); // Subtract 7 days from today
   
-
+      const totalDepositLast7Days = await DepositData.aggregate([
+        {
+          $match: {
+            createdAt: { $gte: sevenDaysAgo },
+          },
+        },
+        {
+          $group: {
+            _id: null, // No grouping by specific fields, just a sum of all documents
+            totalDeposit: { $sum: "$amount" }, // Replace "amount" with the actual field name for deposit value
+          },
+        },
+      ]);
+  
+      const depositAmount = totalDepositLast7Days.length > 0 ? totalDepositLast7Days[0].totalDeposit : 0;
+  
+      res.status(200).json({ totalDepositLast7Days: depositAmount }); // Send the total deposit as response
+    } catch (err) {
+      console.error("Error fetching total deposit in the last 7 days:", err);
+      res.status(500).json({
+        message: "Internal Server Error",
+        error: err.message || err, // Include the error message to help with debugging
+      });
+    }
+  });
+  
 
 module.exports = router

@@ -93,70 +93,6 @@ router.get("/deposituserCountById/:mobile_no", async (req, res) => {
   }
 });
 
-// Get users created today
-// router.get("/newUsersToday", async (req, res) => {
-//   try {
-//     const startOfDay = new Date();
-//     startOfDay.setHours(0, 0, 0, 0); // Set the start of the day to 00:00:00
-
-//     const endOfDay = new Date();
-//     endOfDay.setHours(23, 59, 59, 999); // Set the end of the day to 23:59:59
-
-//     // Find users created today by comparing the createdAt field
-//     const newUsersToday = await Gameuser.find({
-//       createdAt: { $gte: startOfDay, $lte: endOfDay }
-//     });
-
-//     res.status(200).json(newUsersToday); // Send the new users as response
-//   } catch (err) {
-//     console.error("Error fetching new users of today:", err);
-//     res.status(500).json({ message: "Internal Server Error", error: err });
-//   }
-// });
-
-
-
-// Get users created in the last 6 days
-// router.get("/newUsersLast6Days", async (req, res) => {
-//   try {
-//     // Get the current date and subtract 6 days
-//     const sixDaysAgo = new Date();
-//     sixDaysAgo.setDate(sixDaysAgo.getDate() - 6); // Subtract 6 days from today
-
-//     // Find users created in the last 6 days
-//     const newUsersLast6Days = await Gameuser.find({
-//       createdAt: { $gte: sixDaysAgo }
-//     });
-
-//     res.status(200).json(newUsersLast6Days);
-//   } catch (err) {
-//     console.error("Error fetching new users in the last 6 days:", err);
-//     res.status(500).json({ message: "Internal Server Error", error: err });
-//   }
-// });
-
-
-
-
-// Get count of users created in the last 7 days
-// router.get("/newUsersCountLast6Days", async (req, res) => {
-//   try {
-//     // Get the current date and subtract 7 days
-//     const sixDaysAgo = new Date();
-//     sixDaysAgo.setDate(sixDaysAgo.getDate() -7); // Subtract 7 days from today
-
-//     // Count the users created in the last 7 days
-//     const newUsersCountLast6Days = await Gameuser.countDocuments({
-//       createdAt: { $gte: sixDaysAgo }
-//     });
-
-//     res.status(200).json({ newUsersCountLast6Days }); // Send the count as response
-//   } catch (err) {
-//     console.error("Error fetching new users count in the last 7 days:", err);
-//     res.status(500).json({ message: "Internal Server Error", error: err });
-//   }
-// });
-
 
 // Get count of users created in the last 7 days
 router.get("/newUsersCountLast7Days", async (req, res) => {
@@ -174,6 +110,8 @@ router.get("/newUsersCountLast7Days", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error: err });
   }
 });
+
+
 
 
 module.exports = router;
