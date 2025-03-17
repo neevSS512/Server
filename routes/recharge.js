@@ -218,4 +218,41 @@ router.get("/depositDetailsById/:mobile_no", async (req, res) => {
 
 
 
+//last 7days recharge amount
+
+
+  router.get("/totalRechargeLast7Days", async (req, res) => {
+    try {
+      
+        const sevenDaysAgo = moment().subtract(7, 'days').toDate();
+      //   console.log('Seven days ago:', sevenDaysAgo); 
+        const result = await RechargeData.aggregate([
+            {
+                $match: {
+                    createdAt: { $gte: new Date(sevenDaysAgo) } // Use ISODate for proper comparison
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalRecharge: { $sum: "$amount" }
+                }
+            }
+        ]);
+
+    //    console.log('Aggregation result:', result); 
+
+        // If no data found, return 0
+        const totalRecharge = result.length > 0 ? result[0].totalRecharge : 0;
+
+        res.status(200).json({ totalRecharge });
+    } catch (err) {
+        console.log('Error:', err); 
+        res.status(500).send("Error fetching total recharge");
+    }
+});
+
+
+
+
 module.exports = router

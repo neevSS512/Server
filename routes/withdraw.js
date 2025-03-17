@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const moment =require("moment")
 const WithdrawData = require("../models/Withdraw");
 const Gameuser = require("../models/Gameuser");
 router.get("/withdrawData",async(req,res)=>{
@@ -139,38 +140,73 @@ router.get("/getWithdrawDetails", async (req, res) => {
 
 
 
-// Get count of total withdraw in the last 7 days
 // Get total deposit in the last 7 days
-router.get("/totalDepositLast7Days", async (req, res) => {
-    try {
-      const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7); // Subtract 7 days from today
+// router.get("/totalDepositLast7Days", async (req, res) => {
+//     try {
+//       const sevenDaysAgo = new Date();
+//       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7); // Subtract 7 days from today
   
-      const totalDepositLast7Days = await DepositData.aggregate([
-        {
-          $match: {
-            createdAt: { $gte: sevenDaysAgo },
-          },
-        },
-        {
-          $group: {
-            _id: null, // No grouping by specific fields, just a sum of all documents
-            totalDeposit: { $sum: "$amount" }, // Replace "amount" with the actual field name for deposit value
-          },
-        },
-      ]);
+//       const totalDepositLast7Days = await DepositData.aggregate([
+//         {
+//           $match: {
+//             createdAt: { $gte: sevenDaysAgo },
+//           },
+//         },
+//         {
+//           $group: {
+//             _id: null, // No grouping by specific fields, just a sum of all documents
+//             totalDeposit: { $sum: "$amount" }, // Replace "amount" with the actual field name for deposit value
+//           },
+//         },
+//       ]);
   
-      const depositAmount = totalDepositLast7Days.length > 0 ? totalDepositLast7Days[0].totalDeposit : 0;
+//       const depositAmount = totalDepositLast7Days.length > 0 ? totalDepositLast7Days[0].totalDeposit : 0;
   
-      res.status(200).json({ totalDepositLast7Days: depositAmount }); // Send the total deposit as response
-    } catch (err) {
-      console.error("Error fetching total deposit in the last 7 days:", err);
-      res.status(500).json({
-        message: "Internal Server Error",
-        error: err.message || err, // Include the error message to help with debugging
-      });
-    }
-  });
+//       res.status(200).json({ totalDepositLast7Days: depositAmount }); // Send the total deposit as response
+//     } catch (err) {
+//       console.error("Error fetching total deposit in the last 7 days:", err);
+//       res.status(500).json({
+//         message: "Internal Server Error",
+//         error: err.message || err, // Include the error message to help with debugging
+//       });
+//     }
+//   });
   
 
+
+
+
+  router.get("/totalWithdrawLast7Days", async (req, res) => {
+    try {
+      
+        const sevenDaysAgo = moment().subtract(7, 'days').toDate();
+      //   console.log('Seven days ago:', sevenDaysAgo); // Log the date we're comparing against
+
+        // Aggregate the total withdraws in the last 7 days
+        const result = await WithdrawData.aggregate([
+            {
+                $match: {
+                    createdAt: { $gte: new Date(sevenDaysAgo) } // Use ISODate for proper comparison
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalWithdraw: { $sum: "$amount" }
+                }
+            }
+        ]);
+
+      //   console.log('Aggregation result:', result); // Log the result of aggregation
+
+        // If no data found, return 0
+        const totalWithdraw = result.length > 0 ? result[0].totalWithdraw : 0;
+
+        // Return the total withdrawal in the last 7 days
+        res.status(200).json({ totalWithdraw });
+    } catch (err) {
+        console.log('Error:', err); // Log the error for debugging
+        res.status(500).send("Error fetching total withdrawals");
+    }
+});
 module.exports = router
