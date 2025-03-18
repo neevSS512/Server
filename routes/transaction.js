@@ -14,123 +14,168 @@ router.get("/transactionData", async (req, res) => {
 });
 
 
-
-
-// Create a new transaction entry
-// router.post("/transactionData", async (req, res) => {
-//     const { userId, amount, transactionType, purpose, status } = req.body;
+  router.get("/transactionData/:mobile_no", async (req, res) => {
+    const { mobile_no } = req.params;
+    
+    try {
+        // Find all transactions where the mobile_no matches
+        const transactions = await TransactionData.find({ mobile_no: mobile_no });
   
-//     if (!userId || !amount || !transactionType || !purpose) {
-//       return res.status(400).json({ message: "Missing required fields" });
-//     }
+        if (transactions.length === 0) {
+            return res.status(404).json({ message: "No transactions found for this user." });
+        }
   
-//     try {
-//       // Fetch the user data (assuming the user ID exists in GameUser model)
-//       const user = await Gameuser.findById(userId);
-//       if (!user) {
-//         return res.status(404).json({ message: "User not found" });
-//       }
-  
-//       // Create a new transaction document
-//       const newTransaction = new TransactionData({
-//         uid: userId,
-//         amount,
-//         transaction_type: transactionType,
-//         purpose,
-//         transaction_status: status, // Pending or Completed
-//         userName: user.un, // Assuming 'un' is the username
-//         mobile_no: user.mobile_no,
-//         date: new Date(),
-//         createdAt: new Date(),
-//         updatedAt: new Date(),
-//         // Add any other fields you need, like deposit, bonus, winnings, etc.
-//       });
-  
-//       // Save the transaction entry to the database
-//       await newTransaction.save();
-  
-//       // If successful, return the transaction details
-//       res.status(201).json({
-//         message: "Transaction recorded successfully",
-//         transaction: newTransaction,
-//       });
-//     } catch (err) {
-//       console.error("Error creating transaction:", err);
-//       res.status(500).json({ message: "Error creating transaction", error: err });
-//     }
-//   });
-
-
-
-
-
-// Create a new transaction entry
-router.post("/transactionData", async (req, res) => {
-    const { userId, amount, transactionType, purpose, status } = req.body;
-  
-    if (!userId || !amount || !transactionType || !purpose) {
-      return res.status(400).json({ message: "Missing required fields" });
+     
+        res.status(200).json(transactions);
+    } catch (err) {
+     
+        console.error("Error fetching transactions for mobile_no:", mobile_no, err);
+        res.status(500).json({ message: "Error fetching transaction data", error: err.message });
     }
+  });
+
+
+
+
+  
+
+
+  router.post("/createTransaction", async (req, res) => {
+    const {
+      uid, tbid, un, ue, mobile_no, amount, 
+      deposit_amount, winning_amount, bonus_amount, 
+      previous_cash,previous_deposit_cash,previous_winning_cash,previous_bonus_cash,transection_purpose,current_total_cash,updated_deposit_cash,updated_winning_cash,updated_bonus_cash
+      ,contact_support,transaction_status, gameState, paid_tds, tds
+    } = req.body;
   
     try {
-      // Fetch the user data (assuming the user ID exists in GameUser model)
-      const user = await Gameuser.findById(userId);
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
+      // Initialize variables to 0 by default
+      let updatedDeposit = 0;
+      let updatedWinning = 0;
+      let updatedBonus = 0;
+  
+      // Logic to update only the selected type, and reset the others to 0
+      if (transection_purpose === "deposit") {
+        updatedDeposit = parseFloat(amount);  // Update deposit_amount to the added amount
+        updatedWinning = 0;  // Reset winnings to 0
+        updatedBonus = 0;    // Reset bonus to 0
+      } else if (transection_purpose === "winnings") {
+        updatedDeposit = 0;  
+        updatedWinning = parseFloat(amount);  // Update winning_amount to the added amount
+        updatedBonus = 0;    
+      } else if (transection_purpose === "bonus") {
+        updatedDeposit = 0; 
+        updatedWinning = 0;  
+        updatedBonus = parseFloat(amount);  // Update bonus_amount to the added amount
       }
   
-      // Create a new transaction document
+      // Calculate the new total cash value
+      // const newTotalCash = updatedDeposit + updatedWinning + updatedBonus;
+      // const newTotalCash = updatedDeposit + updatedWinning + updatedBonus+previous_cash;
+  
+      // Create a new transaction entry
       const newTransaction = new TransactionData({
-        uid: userId,
+        uid,
+        tbid,
+        un,
+        ue,
+        mobile_no,
         amount,
-        transaction_type: transactionType,
-        purpose,
-        transaction_status: status, // Pending or Completed
-        userName: user.un, // Assuming 'un' is the username
-        mobile_no: user.mobile_no,
-        date: new Date(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        // Add any other fields you need, like deposit, bonus, winnings, etc.
+        deposit_amount: updatedDeposit,
+        winning_amount: updatedWinning,
+        bonus_amount: updatedBonus,
+        previous_cash,
+        previous_deposit_cash,
+        previous_winning_cash,
+        previous_bonus_cash,
+        transection_purpose,
+        current_total_cash,
+        updated_deposit_cash,
+        updated_winning_cash,
+        updated_bonus_cash,
+        contact_support,
+        transaction_status,
+        gameState,
+        paid_tds,
+        tds
       });
   
-      // Save the transaction entry to the database
-      await newTransaction.save();
+      // Save the new transaction entry to the database
+      const savedTransaction = await newTransaction.save();
   
-      // If successful, return the transaction details with a 201 status code
-      res.status(201).json({
-        message: "Transaction recorded successfully",
-        transaction: newTransaction,
-      });
+      res.status(201).json({ message: "Transaction created successfully", savedTransaction });
     } catch (err) {
       console.error("Error creating transaction:", err);
-      res.status(500).json({ message: "Error creating transaction", error: err });
-    }
-  });
-
-
-  // Route to fetch the most recent transaction
-router.get("/latestTransaction", async (req, res) => {
-    try {
-      // Get the most recent transaction by sorting by the creation date (descending)
-      const latestTransaction = await TransactionData.findOne().sort({ createdAt: -1 });
-  
-      if (!latestTransaction) {
-        return res.status(404).json({ message: "No transactions found" });
-      }
-  
-      // Return the latest transaction details
-      res.status(200).json({
-        message: "Latest transaction fetched successfully",
-        transaction: latestTransaction,
-      });
-    } catch (err) {
-      console.error("Error fetching latest transaction:", err);
-      res.status(500).json({ message: "Error fetching latest transaction", error: err });
+      res.status(500).json({ message: "Error creating transaction", error: err.message });
     }
   });
   
+
+
+  //create a new transaction entry
+  // router.post("/createTransaction", async (req, res) => {
+  //   const {
+  //     uid, tbid, un, ue, mobile_no, amount, 
+  //     deposit_amount, winning_amount, bonus_amount, 
+  //     previous_cash, transection_purpose, current_total_cash,
+  //     transaction_status, gameState, paid_tds, tds
+  //   } = req.body;
   
+  //   try {
+  //     // Create a new transaction entry
+  //     const newTransaction = new TransactionData({
+  //       uid,
+  //       tbid,
+  //       un,
+  //       ue,
+  //       mobile_no,
+  //       amount,
+  //       deposit_amount,
+  //       winning_amount,
+  //       bonus_amount,
+  //       previous_cash,
+  //       transection_purpose,
+  //       current_total_cash,
+  //       transaction_status,
+  //       gameState,
+  //       paid_tds,
+  //       tds
+  //     });
+  
+  //     // Save the new transaction entry to the database
+  //     const savedTransaction = await newTransaction.save();
+  
+  //     res.status(201).json({ message: "Transaction created successfully", savedTransaction });
+  //   } catch (err) {
+  //     console.error("Error creating transaction:", err);
+  //     res.status(500).json({ message: "Error creating transaction", error: err.message });
+  //   }
+  // });
+  
+
+
+
 module.exports=router
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

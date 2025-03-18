@@ -120,7 +120,7 @@ router.get("/newUsersCountLast7Days", async (req, res) => {
 //for totalcash
 router.patch("/gameUsers/:id", async (req, res) => {
   const { id } = req.params;
-  const { deposit, Winning, Bonus } = req.body; // Make sure these values come in the request
+  const { deposit, Winning, Bonus } = req.body; 
 
   try {
     const user = await Gameuser.findById(id);
@@ -129,7 +129,7 @@ router.patch("/gameUsers/:id", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Update deposit, Winning, and Bonus
+
     if (deposit) user.deposit = deposit;
     if (Winning) user.Winning = Winning;
     if (Bonus) user.Bonus = Bonus;
@@ -137,7 +137,7 @@ router.patch("/gameUsers/:id", async (req, res) => {
     // Calculate totalcash (sum of deposit, winnings, and bonus)
     user.totalcash = parseFloat(user.deposit) + parseFloat(user.Winning) + parseFloat(user.Bonus);
 
-    // Save the updated user data
+ 
     await user.save();
 
     res.status(200).json({ message: "User updated successfully", user });
@@ -149,57 +149,4 @@ router.patch("/gameUsers/:id", async (req, res) => {
 
 
 
-
-
-
-
-// Create a new transaction entry
-router.post("/transactionData", async (req, res) => {
-    const { userId, amount, transactionType, purpose, status } = req.body;
-    
-    if (!userId || !amount || !transactionType || !purpose) {
-        return res.status(400).json({ message: "Missing required fields" });
-    }
-
-    try {
-        // Fetch the user data (assuming the user ID exists in GameUser model)
-        const user = await Gameuser.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        // Create a new transaction document
-        const newTransaction = new TransactionData({
-            uid: userId,
-            amount,
-            transaction_type: transactionType,
-            purpose,
-            transaction_status: status, // Pending or Completed
-            userName: user.un, // Assuming 'un' is the username
-            mobile_no: user.mobile_no,
-            date: new Date(),
-            // Add other necessary fields like deposit, bonus, winnings, etc.
-        });
-
-        // Save the transaction entry to the database
-        await newTransaction.save();
-
-        // If successful, return the transaction details
-        res.status(201).json({
-            message: "Transaction recorded successfully",
-            transaction: newTransaction,
-        });
-    } catch (err) {
-        console.error("Error creating transaction:", err);
-        res.status(500).json({ message: "Error creating transaction", error: err });
-    }
-});
-
 module.exports = router;
-
-
-
-
-
-
-
