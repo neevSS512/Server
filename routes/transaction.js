@@ -4,7 +4,7 @@ const TransactionData=require('../models/Transaction')
 const Gameuser = require("../models/Gameuser");
 router.get("/transactionData", async (req, res) => {
     try {
-        const response = await TransactionData.find({}).limit(8000)
+        const response = await TransactionData.find({}).limit(12000)
         // console.log(response);
         res.status(200).json(response);     
     } catch (err) {

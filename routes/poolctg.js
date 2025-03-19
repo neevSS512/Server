@@ -5,7 +5,7 @@ const poolGame = require("../models/poolctgGame");
 router.get("/poolctgData", async (req, res) => {
   try {
     const response = await poolGame.find({});
-    console.log(response);
+    // console.log(response);
     res.status(200).json(response); 
   } catch (err) {
     console.log(err);
@@ -19,7 +19,7 @@ router.get("/poolctgData", async (req, res) => {
 router.patch("/poolctgData/:id", async (req, res) => {
   try {
     const _id = req.params.id.trim();  // Trim the ID to remove any whitespace or newline characters
-    console.log("ID being updated: ", _id);
+    // console.log("ID being updated: ", _id);
 
     // Ensure the ID is a valid ObjectId
     if (!/^[0-9a-fA-F]{24}$/.test(_id)) {
@@ -27,7 +27,7 @@ router.patch("/poolctgData/:id", async (req, res) => {
     }
 
     // Log the incoming request body to verify it
-    console.log("Request Body: ", req.body);
+    // console.log("Request Body: ", req.body);
 
     const updatedData = await poolGame.findByIdAndUpdate(_id, req.body, { new: true });
 

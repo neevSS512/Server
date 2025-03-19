@@ -3,7 +3,7 @@ const moment = require("moment");
 const RechargeData = require("../models/Recharge")
 router.get("/rechargeData",async(req,res)=>{
     try{
-        const response=await RechargeData.find({}).limit(30)
+        const response=await RechargeData.find({})
         // console.log(response)
         res.status(200).json(response)     
     }
@@ -114,13 +114,13 @@ router.get("/depositCountById/:mobile_no", async (req, res) => {
         return res.status(400).json({ message: "mobile_no is required" });
     }
 
-    console.log("Received mobile_no:", mobile_no); 
+    // console.log("Received mobile_no:", mobile_no); 
 
     try {
         // Count the documents where mobile_no matches
         const depositCount = await RechargeData.countDocuments({ mobile_no });
 
-        console.log("Deposit count:", depositCount); 
+        // console.log("Deposit count:", depositCount); 
 
         res.status(200).json({
             mobile_no,
@@ -133,41 +133,6 @@ router.get("/depositCountById/:mobile_no", async (req, res) => {
 });
 
 
-
-
-
-
-
-// // for fetching all deta
-// router.get("/depositDetailsById/:mobile_no", async (req, res) => {
-//     const { mobile_no } = req.params;
-
-//     if (!mobile_no) {
-//         return res.status(400).json({ error: true, message: "mobile_no is required" });
-//     }
-
-//     console.log("Received mobile_no:", mobile_no);
-
-//     try {
-//         // Fetch all recharge details where mobile_no matches
-//         const rechargeDetails = await RechargeData.find({ mobile_no }).sort({ transDate: -1 });
-
-//         if (rechargeDetails.length === 0) {
-//             return res.status(404).json({ error: true, message: "No recharge details found for the provided mobile number" });
-//         }
-
-//         console.log("Recharge details:", rechargeDetails);
-
-//         // Return the details
-//         res.status(200).json({
-//             mobile_no,
-//             rechargeDetails
-//         });
-//     } catch (err) {
-//         console.error("Error fetching recharge details:", err);
-//         res.status(500).json({ error: true, message: "An error occurred while fetching recharge details", error: err.message });
-//     }
-// });
 
 
 
@@ -197,7 +162,7 @@ router.get("/depositDetailsById/:mobile_no", async (req, res) => {
             return res.status(404).json({ error: true, message: "No recharge details found for the provided mobile number" });
         }
 
-        console.log("Recharge details:", rechargeDetails);
+        // console.log("Recharge details:", rechargeDetails);
 
         // Return paginated results
         res.status(200).json({
@@ -224,7 +189,7 @@ router.get("/depositDetailsById/:mobile_no", async (req, res) => {
   router.get("/totalRechargeLast7Days", async (req, res) => {
     try {
       
-        const sevenDaysAgo = moment().subtract(7, 'days').toDate();
+        const sevenDaysAgo = moment().subtract(1, 'days').toDate();
       //   console.log('Seven days ago:', sevenDaysAgo); 
         const result = await RechargeData.aggregate([
             {

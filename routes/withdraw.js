@@ -102,16 +102,13 @@ router.get("/StatusCounts", async (req, res) => {
 
 
 
-
-
-
 router.get("/getWithdrawDetails", async (req, res) => {
     const { mobile_no } = req.query;  // mobile_no sent as a query parameter
     if (!mobile_no) {
         return res.status(400).json({ error: true, message: "mobile_no is required" });
     }
     
-    console.log("Received mobile_no:", mobile_no);
+    // console.log("Received mobile_no:", mobile_no);
 
     try {
         
@@ -140,46 +137,13 @@ router.get("/getWithdrawDetails", async (req, res) => {
 
 
 
-// Get total deposit in the last 7 days
-// router.get("/totalDepositLast7Days", async (req, res) => {
-//     try {
-//       const sevenDaysAgo = new Date();
-//       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7); // Subtract 7 days from today
-  
-//       const totalDepositLast7Days = await DepositData.aggregate([
-//         {
-//           $match: {
-//             createdAt: { $gte: sevenDaysAgo },
-//           },
-//         },
-//         {
-//           $group: {
-//             _id: null, // No grouping by specific fields, just a sum of all documents
-//             totalDeposit: { $sum: "$amount" }, // Replace "amount" with the actual field name for deposit value
-//           },
-//         },
-//       ]);
-  
-//       const depositAmount = totalDepositLast7Days.length > 0 ? totalDepositLast7Days[0].totalDeposit : 0;
-  
-//       res.status(200).json({ totalDepositLast7Days: depositAmount }); // Send the total deposit as response
-//     } catch (err) {
-//       console.error("Error fetching total deposit in the last 7 days:", err);
-//       res.status(500).json({
-//         message: "Internal Server Error",
-//         error: err.message || err, // Include the error message to help with debugging
-//       });
-//     }
-//   });
-  
-
 
 
 
   router.get("/totalWithdrawLast7Days", async (req, res) => {
     try {
       
-        const sevenDaysAgo = moment().subtract(7, 'days').toDate();
+        const sevenDaysAgo = moment().subtract(1, 'days').toDate();
       //   console.log('Seven days ago:', sevenDaysAgo); // Log the date we're comparing against
 
         // Aggregate the total withdraws in the last 7 days

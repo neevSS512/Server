@@ -20,7 +20,7 @@ router.get("/snakecounterctg", async (req, res) => {
 router.patch("/snakecounterctg/:id", async (req, res) => {
   try {
     const _id = req.params.id.trim();  // Trim the ID to remove any whitespace or newline characters
-    console.log("ID being updated: ", _id);
+    // console.log("ID being updated: ", _id);
 
     // Ensure the ID is a valid ObjectId
     if (!/^[0-9a-fA-F]{24}$/.test(_id)) {
@@ -28,7 +28,7 @@ router.patch("/snakecounterctg/:id", async (req, res) => {
     }
 
     // Log the incoming request body to verify it
-    console.log("Request Body: ", req.body);
+    // console.log("Request Body: ", req.body);
 
     const updatedData = await snakecounterCtgData.findByIdAndUpdate(_id, req.body, { new: true });
 
@@ -37,7 +37,7 @@ router.patch("/snakecounterctg/:id", async (req, res) => {
       return res.status(404).json({ message: "Data not found" });
     }
 
-    console.log("Updated Data: ", updatedData);
+    // console.log("Updated Data: ", updatedData);
     res.status(200).json(updatedData);
 
   } catch (err) {
@@ -67,7 +67,7 @@ router.post("/snakecounterctg", async (req, res) => {
 router.delete("/snakecounterctg/:id", async (req, res) => {
   try {
     const _id = req.params.id.trim(); // Trim the ID to remove any whitespace or newline characters
-    console.log("ID being deleted: ", _id);
+    // console.log("ID being deleted: ", _id);
 
     // Ensure the ID is a valid ObjectId
     if (!/^[0-9a-fA-F]{24}$/.test(_id)) {

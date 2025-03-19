@@ -3,7 +3,7 @@ const Kyc = require("../models/Kyc");
 
 router.get("/kycData",async(req,res)=>{
     try{
-        const response=await Kyc.find({}).limit(30)
+        const response=await Kyc.find({})
         // console.log(response)
         res.status(200).json(response)
     }

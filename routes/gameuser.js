@@ -4,7 +4,9 @@ const Gameuser = require("../models/Gameuser");
 // Get all users
 router.get("/gameUsers", async (req, res) => {
   try {
-    const response = await Gameuser.find({}).limit(30)
+
+    const response = await Gameuser.find({}).limit(2000)
+    // console.log(response)
     res.status(200).json(response);
   } catch (err) {
     console.error("Error fetching game users:", err);
@@ -98,7 +100,7 @@ router.get("/deposituserCountById/:mobile_no", async (req, res) => {
 router.get("/newUsersCountLast7Days", async (req, res) => {
   try {
     const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7); // Subtract 7 days from today
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 1); // Subtract 7 days from today
 
     const newUsersCountLast7Days = await Gameuser.countDocuments({
       createdAt: { $gte: sevenDaysAgo },
