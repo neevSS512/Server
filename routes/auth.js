@@ -46,6 +46,7 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log("email:::::",email);
     
     // Check if email and password are provided
     if (!email || !password) {
@@ -71,6 +72,8 @@ router.post("/login", async (req, res) => {
     // Remove the password field from the response (never send the password back)
     delete user.password;
 
+    console.log("token:::::",token);
+    console.log("user:::::",user);
     // Respond with the token and user info (without password)
     res.status(200).json({ token, user });
   } catch (err) {
